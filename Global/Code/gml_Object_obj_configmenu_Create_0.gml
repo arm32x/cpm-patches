@@ -13,8 +13,8 @@ configSelect = 0;
 //
 // Global (i can't use stringsetsub() bc of Chapter 1)
 config_info[0] = ["Menu Mode", "Change when the menu can be accessed with " + scr_get_input_name(6) + ".#"];
-config_state[0][0] = ["SAVE", "Only open at SAVE points."];
-config_state[0][1] = ["POWER", "Open from the POWER menu."];
+config_state[0][0] = ["POWER", "Open from the POWER menu."];
+config_state[0][1] = ["SAVE", "Only open at SAVE points."];
 config_state[0][2] = ["BOTH", "Open from the POWER or SAVE menus."];
 
 // Global

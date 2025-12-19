@@ -5,7 +5,7 @@
 +{
 +    if (button3_p() && buffer < 0)
 +    {
-+        if (scr_modconfig("menuMode") == 0 || scr_modconfig("menuMode") == 2)
++        if (scr_modconfig("menuMode") == 1 || scr_modconfig("menuMode") == 2)
 +        {
 +            menuno = 3;
 +            snd_play(snd_select);
