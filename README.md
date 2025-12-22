@@ -14,23 +14,21 @@ The end goal of Custom Party Menu is incredibly ambitious, so I intend to break 
 
 All Chapters:
 
-    Party-changing menu, and an option to stop the party from being changed when it normally would. (i.e: Noelle joining the party)
-    Mod-Specific options, stored in an unused part of the save file.
-    Failsafe for trying to spawn the SOUL without Kris.
-    Fixed crashes from starting cutscenes without the correct characters.
+    - Party-changing menu, and an option to stop the party from being changed when it normally would. (i.e: Noelle joining the party)
+    - Mod-Specific options, stored in an unused part of the save file.
+    - Failsafe for trying to spawn the SOUL without Kris.
+    - Fixed crashes from starting cutscenes without the correct characters.
 
 
 Chapter 2:
 
-    Added ACTs for Susie and Ralsei during Noelle's section
-    Added ACTs for Noelle during the rest of the game.
-    Changed group ACTs to properly adapt to the current party.
-    Added code to SleepMist for fights like Jigsaw Joe and Berdly (coaster)
-    Berdly's coasters and Spamton's coasters work with custom parties.
-
-    Option to customize the coasters used during the fight.
+    - Added ACTs for Susie, Ralsei and/or Noelle in every fight.
+    - Changed group ACTs to properly adapt to the current party.
+    - Added special-cases to SleepMist to be consistent with Pacify.
+    - Made roller coaster fights (Berdly and Spamton NEO) support different parties.
+    - Coaster variants adapt to the party member, or can be chosen by the player.
 
 
 Chapter 3:
 
-    Custom party support for the Roaring Knight fight (and that's it.)
+    - Custom party support for the Roaring Knight fight (and that's it.)
