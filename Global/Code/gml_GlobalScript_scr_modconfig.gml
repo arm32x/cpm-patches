@@ -11,7 +11,7 @@ function scr_modconfig(arg0)
     }
     if (init)
     {
-        global.modconfig = [0, 0, 0, 0, 0];
+        global.modconfig = [2, 0, 0, 0, 0];
         for (i = 0; i < array_length(global.modconfig); i++)
         {
             var checker = string_char_at(string_digits(global.othername[2]), i + 1);
