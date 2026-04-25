@@ -1,48 +1,530 @@
 --- a/Code/gml_Object_obj_dummyenemy_Step_0.gml
 +++ b/Code/gml_Object_obj_dummyenemy_Step_0.gml
-@@ -3,23 +3,34 @@
+@@ -3,11 +3,20 @@
      scr_ambush();
      ambushed = 1;
  }
 +global.charmove[0] = 0;
 +global.charmove[1] = 0;
 +global.charmove[2] = 0;
-+if (scr_havechar(2))
++susie_dmg = 0;
++var msg_num = 0;
++if (scr_havechar(2) && susie_auto && plot == 1 && turns <= 3)
 +{
-+    global.charmove[scr_findchar(1)] = 1;
++    global.charmove[scr_findchar(2)] = 1;
++    susie_dmg = round(((global.battleat[scr_findchar(2)] * 160) / 20) - (global.monsterdf[global.chartarget[scr_findchar(2)]] * 3));
 +}
  if (plot != 3)
  {
 -    global.charmove[0] = 1;
 -    global.charmove[1] = 0;
 -    if (global.charspecial[0] == 100)
--    {
--        spare_used = 1;
--    }
--    else
--    {
--        spare_used = 0;
-+    if (scr_havechar(1))
-+    {
-+        global.charmove[scr_findchar(1)] = 1;
-+        if (global.charspecial[0] == 100)
-+        {
-+            spare_used = 1;
-+        }
-+        else
-+        {
-+            spare_used = 0;
-+        }
++    global.charmove[scr_findchar(mainchar)] = 1;
++    if (global.charspecial[scr_findchar(mainchar)] == 100)
+     {
+         spare_used = 1;
      }
+@@ -18,17 +27,16 @@
  }
  else
  {
 -    global.charmove[0] = 0;
 -    global.charmove[1] = 1;
-+    if (scr_havechar(3))
-+    {
-+        global.charmove[scr_findchar(3)] = 1;
-+    }
-     if (global.charspecial[1] == 100)
++    global.charmove[scr_findchar(3)] = 1;
+-    if (global.charspecial[1] == 100)
++    if (global.charspecial[scr_findchar(3)] == 100)
      {
          ral_wrongcommand = 1;
+     }
+-    if (global.charaction[1] == 4)
++    if (global.charaction[scr_findchar(3)] == 4)
+     {
+         ral_wrongcommand = 1;
+     }
+-    if (global.charaction[1] != 2 && global.charaction[1] != 4)
++    if (global.charaction[scr_findchar(3)] != 2 && global.charaction[scr_findchar(3)] != 4)
+     {
+         with (obj_attackpress)
+         {
+@@ -45,8 +53,8 @@
+             global.myfight = -1;
+             instance_destroy();
+         }
+-        global.charaction[1] = 0;
+-        global.faceaction[1] = 0;
++        global.charaction[scr_findchar(3)] = 0;
++        global.faceaction[scr_findchar(3)] = 0;
+     }
+ }
+ if (global.monster[myself] == 1)
+@@ -69,12 +77,12 @@
+             {
+                 abletotarget = 0;
+             }
+-            mytarget = choose(0);
++            mytarget = choose(scr_findchar(mainchar));
+             if (abletotarget == 1)
+             {
+                 while (global.charcantarget[mytarget] == 0)
+                 {
+-                    mytarget = choose(0);
++                    mytarget = choose(scr_findchar(3));
+                 }
+             }
+             else
+@@ -106,17 +114,17 @@
+         if (plot >= 1)
+         {
+             dial = 0;
+-            if (global.charaction[0] == 1)
++            if (global.charaction[scr_findchar(mainchar)] == 1 && plot != 3)
+             {
+-                if (dummyhp > global.monsterhp[0])
++                if (dummyhp > (global.monsterhp[0] + susie_dmg))
+                 {
+                     dial = 1;
+                 }
+-                if (dummyhp == global.monsterhp[0] && plot == 1)
++                if (dummyhp == (global.monsterhp[0] + susie_dmg) && plot == 1)
+                 {
+                     dial = 2;
+                 }
+-                if (dummyhp == global.monsterhp[0] && misstime == 9 && plot == 2)
++                if (dummyhp == (global.monsterhp[0] + susie_dmg) && misstime == 9 && plot == 2)
+                 {
+                     dial = 3;
+                     global.flag[205] = 6;
+@@ -128,7 +136,7 @@
+                     global.flag[205] = 4;
+                 }
+             }
+-            if (global.charaction[0] == 10 && commanded == 0)
++            if (global.charaction[scr_findchar(mainchar)] == 10 && commanded == 0 && plot != 3)
+             {
+                 global.fe = 0;
+                 global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_115_0");
+@@ -182,7 +190,7 @@
+                 defendtime += 1;
+                 commanded = 1;
+             }
+-            if (global.charaction[0] == 4 && commanded == 0)
++            if (global.charaction[scr_findchar(mainchar)] == 4 && commanded == 0 && plot != 3)
+             {
+                 global.fe = 0;
+                 global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_167_0");
+@@ -254,34 +262,88 @@
+                 ral_wrongcommand_count += 1;
+                 commanded = 0;
+             }
+-            if (global.charaction[1] == 2 && ral_wrongcommand == 0 && commanded == 0)
++            if (global.charaction[scr_findchar(3)] == 2 && ral_wrongcommand == 0 && commanded == 0)
+             {
+-                global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_252_0");
+-                global.msg[1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_253_0");
+-                global.msg[2] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_254_0");
+-                global.msg[3] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_255_0");
+-                global.msg[4] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_256_0");
+-                if (pacifycon == 1)
++                if (plot == 3)
+                 {
++                    global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_252_0");
++                    global.msg[1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_253_0");
++                    global.msg[2] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_254_0");
++                    global.msg[3] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_255_0");
++                    global.msg[4] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_256_0");
++                    if (pacifycon == 1)
++                    {
+-                    global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_260_0");
++                        global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_260_0");
+-                    if (global.monsterstatus[myself] == 0)
++                        if (global.monsterstatus[myself] == 0)
+-                    {
++                        {
+-                        global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_262_0");
++                            global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_262_0");
++                        }
+                     }
++                    if (!scr_havechar(1))
++                    {
++                        global.msg[2] = "\\E1* Umm.../";
++                        global.msg[3] = "\\E9* I don't really know how to practice \\I3   ing without Kris.../";
++                        global.msg[4] = "\\E8* Let's assume they already \\I3   ed perfectly./";
++                        global.msg[5] = "\\E0* Since it's name should be \\cYYELLOW\\cW, we can skip to the \\cYSPARING\\cW part!/%";
++                        global.mercymod[myself] = 100;
++                        plot = 5;
++                    }
++                    else
++                    {
++                        plot = 4;
++                        if (global.mercymod[myself] >= 100)
++                        {
++                            global.msg[2] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_268_0");
++                            global.msg[3] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_269_0");
++                            global.msg[4] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_270_0");
++                            plot = 5;
++                        }
++                    }
++                    spell_command = 0;
+                 }
+-                plot = 4;
+-                if (global.mercymod[myself] >= 100)
++                else
+                 {
+-                    global.msg[2] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_268_0");
+-                    global.msg[3] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_269_0");
+-                    global.msg[4] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_270_0");
+-                    plot = 5;
++                    if (plot < 3)
++                    {
++                        if (spell_command == 0)
++                        {
++                            global.msg[0] = "\\E3* Wait, I'm getting ahead of myself!/";
++                            global.msg[1] = "\\EB* I wanted to teach Kris how to \\cYDEFEND\\cW first./%";
++                        }
++                        if (spell_command == 1)
++                        {
++                            global.msg[0] = "\\E1* The plan was for \\cYSPELLs\\cW to be taught after \\cYDEFENDING\\cW./";
++                            global.msg[1] = "\\E9* ...Why can't I get my own lesson right?/%";
++                        }
++                        if (spell_command == 2)
++                        {
++                            dial = 3;
++                        }
++                    }
++                    else
++                    {
++                        if (spell_command == 0)
++                        {
++                            global.msg[0] = "\\E1* I already did my lesson on \\cYSPELLs\\cW.../";
++                            global.msg[1] = "\\EB* There's no need to keep using them now./%";
++                        }
++                        if (spell_command == 1)
++                        {
++                            global.msg[0] = "\\E6* I already practiced my \\cYSPELLs\\cW enough, right?/";
++                            global.msg[1] = "\\E4* Do I... still need more practice?/%";
++                        }
++                        if (spell_command == 2)
++                        {
++                            dial = 3;
++                        }
++                    }
++                    spell_command += 1;
+                 }
+                 commanded = 1;
+             }
+             if (spare_used == 1 && commanded == 0)
+             {
+-                if (plot < 5)
++                if (plot < 5 && plot != 3)
+                 {
+                     global.fe = 0;
+                     if (spare_command == 0)
+@@ -319,7 +381,14 @@
+                 if (plot == 5)
+                 {
+                     global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_307_0");
++                    if (scr_havechar(1))
++                    {
+-                    global.msg[1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_308_0");
++                        global.msg[1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_308_0");
++                    }
++                    else
++                    {
++                        global.msg[0] = global.msg[0] + "%";
++                    }
+                     won = 1;
+                 }
+                 spare_used = 0;
+@@ -331,7 +400,8 @@
+                 if (plot == 1)
+                 {
+                     global.fe = 3;
++                    msg_num = 0;
+-                    if (dummyhp > (global.monsterhp[0] + 50))
++                    if (dummyhp > (global.monsterhp[0] + 50 + susie_dmg))
+                     {
+                         global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_327_0");
+                         global.msg[1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_328_0");
+@@ -340,17 +410,35 @@
+                     {
+                         global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_332_0");
+                         global.msg[1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_333_0") + scr_get_input_name(4) + scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_333_1");
++                        if (scr_havechar(2))
++                        {
++                            scr_susface(2, 2);
++                            global.msg[3] = "* Unless you're just that weak./";
++                            scr_ralface(4, 0);
++                            msg_num = 3;
++                        }
+                     }
+                     if (misstime >= 6)
+                     {
+                         global.fe = 8;
+                         global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_338_0");
+                         global.msg[1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_339_0");
++                        if (scr_havechar(2))
++                        {
++                            scr_susface(2, "C");
++                            global.msg[3] = "* .../";
++                            scr_ralface(4, "C");
++                            global.msg[5] = "* Susie, wake up./";
++                            scr_susface(6, 0);
++                            global.msg[7] = "* ...Huh? Are we done yet?/";
++                            scr_ralface(8, 0);
++                            msg_num = 7;
++                        }
+                     }
+-                    global.msg[2] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_341_0");
++                    global.msg[msg_num + 2] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_341_0");
+-                    global.msg[3] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_342_0");
++                    global.msg[msg_num + 3] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_342_0");
+-                    global.msg[4] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_343_0");
++                    global.msg[msg_num + 4] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_343_0");
+-                    global.msg[5] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_344_0");
++                    global.msg[msg_num + 5] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_344_0");
+                     plot = 2;
+                     if (defendtime >= 1)
+                     {
+@@ -399,8 +487,16 @@
+                 global.msg[1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_399_0") + scr_get_input_name(4) + scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_399_1");
+                 if (misstime >= 1)
+                 {
++                    msg_num = 0;
+                     global.fe = 8;
++                    if (scr_havechar(2) && misstime == 1)
++                    {
++                        scr_susface(0, 2);
++                        global.msg[1] = "* WOW you suck at this!/";
++                        scr_ralface(2, 8);
++                        msg_num = 3;
++                    }
+-                    global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_403_0");
++                    global.msg[msg_num] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_403_0");
+                     if (misstime == 2)
+                     {
+                         global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_404_0") + scr_get_input_name(4) + scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_404_1");
+@@ -428,18 +524,27 @@
+                     }
+                     if (misstime == 8)
+                     {
++                        msg_num = 0;
++                        if (scr_havechar(2))
++                        {
++                            scr_susface(0, "B");
++                            global.msg[1] = "* JUST HIT THE TARGET ALREADY!!/";
++                            global.msg[2] = "* HOW HARD IS IT?!/";
++                            scr_ralface(3, 6);
++                            msg_num = 4;
++                        }
+                         global.fe = 1;
+-                        global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_417_0");
++                        global.msg[msg_num] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_417_0");
+                         plot = 2;
+                         if (defendtime >= 1)
+                         {
+-                            global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_421_0");
++                            global.msg[msg_num] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_421_0");
+-                            global.msg[1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_422_0");
++                            global.msg[msg_num + 1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_422_0");
+-                            global.msg[2] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_423_0");
++                            global.msg[msg_num + 2] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_423_0");
+-                            global.msg[3] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_424_0");
++                            global.msg[msg_num + 3] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_424_0");
+-                            global.msg[4] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_425_0");
++                            global.msg[msg_num + 4] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_425_0");
+-                            global.msg[5] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_426_0");
++                            global.msg[msg_num + 5] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_426_0");
+-                            global.msg[6] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_427_0");
++                            global.msg[msg_num + 6] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_427_0");
+                             plot = 3;
+                         }
+                     }
+@@ -450,14 +555,29 @@
+             {
+                 global.fe = 9;
+                 global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_441_0");
+-                global.msg[1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_442_0");
+-                global.msg[2] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_443_0");
+-                global.msg[3] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_444_0");
+-                if (hitdum >= 4)
+-                {
+-                    global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_447_0");
+-                    global.msg[1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_448_0");
+-                    global.msg[2] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_449_0");
++                if (scr_havechar(1))
++                {
++                    global.msg[1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_442_0");
++                    global.msg[2] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_443_0");
++                    if (!scr_havechar(2) && mainchar != 3)
++                    {
++                        global.msg[3] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_444_0");
++                    }
++                    else
++                    {
++                        global.msg[3] = "\\E0* Let's... try again later, OK?/%";
++                    }
++                    if (hitdum >= 4)
++                    {
++                        global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_447_0");
++                        global.msg[1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_448_0");
++                        global.msg[2] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_449_0");
++                    }
++                }
++                else
++                {
++                    global.msg[1] = "\\E7* Let's just hope the real Kris and Susie aren't, um.../";
++                    global.msg[2] = "\\E1* this... dense./%";
+                 }
+                 won = 1;
+                 global.myfight = 999;
+@@ -616,15 +736,28 @@
+     global.fe = 0;
+     global.writerimg[0] = scr_84_get_sprite("spr_btfight");
+     global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_598_0");
+-    if (kris_inithp > global.hp[1])
++    if (kris_inithp > global.hp[mainchar])
+     {
+         global.fe = 6;
+         global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_602_0");
+     }
+     global.msg[1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_604_0");
++    msg_num = 0;
++    if (scr_havechar(2))
++    {
++        scr_susface(2, 0);
++        global.msg[3] = "* You dorks just wanna run away from everything?/";
++        global.msg[4] = "\\E1* I thought you were teaching us how to \\cYFIGHT\\cW./";
++        scr_ralface(5, "B");
++        global.msg[6] = "* I'm getting there, Susie./";
++        msg_num = 4;
++    }
++    else
++    {
+-    global.msg[2] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_605_0");
++        global.msg[2] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_605_0");
++    }
+-    global.msg[3] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_606_0");
++    global.msg[msg_num + 3] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_606_0");
+-    global.msg[4] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_607_0");
++    global.msg[msg_num + 4] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_607_0");
+     global.battlemsg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_610_0");
+     scr_battletext();
+     con = 6;
+@@ -685,11 +818,11 @@
+     }
+     if (actcon == 10)
+     {
+-        with (global.charinstance[0])
++        with (global.charinstance[scr_findchar(1)])
+         {
+             visible = 0;
+         }
+-        k = scr_dark_marker(global.charinstance[0].x, global.charinstance[0].y, spr_kris_hug);
++        k = scr_dark_marker(global.charinstance[scr_findchar(1)].x, global.charinstance[scr_findchar(1)].y, spr_kris_hug);
+         with (k)
+         {
+             scr_move_to_point_over_time(global.monsterx[0] - 42, global.monstery[0] - 30, 15);
+@@ -732,23 +865,40 @@
+         }
+         if (plot == 1)
+         {
++            msg_num = 0;
++            if (scr_havechar(2))
++            {
++                scr_susface(0, 2);
++                global.msg[1] = "* What, you trying to grapple it or something?/";
++                scr_ralface(2, 0);
++                msg_num = 3;
++            }
+             global.fe = 3;
+-            global.msg[0] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_722_0");
+-            global.msg[1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_723_0");
+-            global.msg[2] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_724_0");
+-            global.msg[3] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_725_0");
+-            global.msg[4] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_726_0");
+-            global.msg[5] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_727_0");
+-            global.msg[6] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_728_0");
++            global.msg[msg_num] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_722_0");
++            global.msg[msg_num + 1] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_723_0");
++            global.msg[msg_num + 2] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_724_0");
++            if (scr_havechar(2))
++            {
++                scr_susface(6, 0);
++                global.msg[7] = "* ...Whatever./";
++                global.msg[8] = "\\E2* If you losers don't know how to WIN, that's not my problem./";
++                scr_ralface(9, 9);
++                global.msg[10] = "* .../";
++                msg_num = 8;
++            }
++            global.msg[msg_num + 3] = "\\E8" + scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_725_0");
++            global.msg[msg_num + 4] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_726_0");
++            global.msg[msg_num + 5] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_727_0");
++            global.msg[msg_num + 6] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_728_0");
+             plot = 2;
+             if (defendtime >= 1)
+             {
+-                global.msg[3] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_733_0");
++                global.msg[msg_num + 3] = "\\E8" + scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_733_0");
+-                global.msg[4] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_734_0");
++                global.msg[msg_num + 4] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_734_0");
+-                global.msg[5] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_735_0");
++                global.msg[msg_num + 5] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_735_0");
+-                global.msg[6] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_736_0");
++                global.msg[msg_num + 6] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_736_0");
+-                global.msg[7] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_737_0");
++                global.msg[msg_num + 7] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_737_0");
+-                global.msg[8] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_738_0");
++                global.msg[msg_num + 8] = scr_84_get_lang_string("obj_dummyenemy_slash_Step_0_gml_738_0");
+                 plot = 3;
+             }
+         }
+@@ -786,7 +936,7 @@
+         }
+         with (k)
+         {
+-            scr_move_to_point_over_time(global.charinstance[0].x, global.charinstance[0].y, 15);
++            scr_move_to_point_over_time(global.charinstance[scr_findchar(1)].x, global.charinstance[scr_findchar(1)].y, 15);
+         }
+         actcon = 19;
+         alarm[4] = 25;
+@@ -799,7 +949,7 @@
+         }
+         global.mercymod[0] = 100;
+         global.mercymod[1] = 100;
+-        global.charinstance[0].visible = 1;
++        global.charinstance[scr_findchar(1)].visible = 1;
+         actcon = 1;
+     }
+     if (acting == 3 && actcon == 0)
+@@ -825,11 +975,11 @@
+     {
+         makekris = 1;
+         maker = 0;
+-        with (global.charinstance[0])
++        with (global.charinstance[scr_findchar(1)])
+         {
+             visible = 0;
+         }
+-        k = scr_dark_marker(global.charinstance[0].x, global.charinstance[0].y, spr_kris_hug);
++        k = scr_dark_marker(global.charinstance[scr_findchar(1)].x, global.charinstance[scr_findchar(1)].y, spr_kris_hug);
+         with (k)
+         {
+             scr_move_to_point_over_time(obj_heroralsei.x - 24, obj_heroralsei.y + 10, 15);
+@@ -919,7 +1069,7 @@
+         }
+         with (k)
+         {
+-            scr_move_to_point_over_time(global.charinstance[0].x, global.charinstance[0].y, 15);
++            scr_move_to_point_over_time(global.charinstance[scr_findchar(1)].x, global.charinstance[scr_findchar(1)].y, 15);
+         }
+         actcon = 39;
+         alarm[4] = 25;
+@@ -940,7 +1090,7 @@
+         {
+             instance_destroy();
+         }
+-        global.charinstance[0].visible = 1;
++        global.charinstance[scr_findchar(1)].visible = 1;
+         actcon = 1;
+     }
+     if (actcon >= 30 && actcon < 40)
