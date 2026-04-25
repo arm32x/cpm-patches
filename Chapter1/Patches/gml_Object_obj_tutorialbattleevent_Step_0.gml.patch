@@ -1,0 +1,30 @@
+--- a/Code/gml_Object_obj_tutorialbattleevent_Step_0.gml
++++ b/Code/gml_Object_obj_tutorialbattleevent_Step_0.gml
+@@ -2,15 +2,18 @@
+ {
+     if (con == 1 && __view_get(e__VW.XView, 0) >= (xx - 13) && __view_get(e__VW.XView, 0) <= (xx + 20) && global.interact == 0)
+     {
++        if (scr_havechar(3))
++        {
+-        __view_set(e__VW.XView, 0, xx - 10);
++            __view_set(e__VW.XView, 0, xx - 10);
+-        global.interact = 1;
++            global.interact = 1;
+-        con = 40;
++            con = 40;
+-        global.msc = 135;
++            global.msc = 135;
+-        scr_text(global.msc);
++            scr_text(global.msc);
+-        global.fe = 3;
++            global.fe = 3;
+-        global.typer = 31;
++            global.typer = 31;
+-        global.fc = 2;
++            global.fc = 2;
+-        instance_create(0, 0, obj_dialoguer);
++            instance_create(0, 0, obj_dialoguer);
++        }
+     }
+     if (con == 20 && d_ex() == 0)
+     {

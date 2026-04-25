@@ -1,0 +1,107 @@
+--- a/Code/gml_GlobalScript_scr_text.gml
++++ b/Code/gml_GlobalScript_scr_text.gml
+@@ -276,22 +276,82 @@
+             global.choicemsg[1] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_289_0");
+             global.choicemsg[2] = " ";
+             global.choicemsg[3] = " ";
++            if (scr_havechar(1) || scr_havechar(2))
++            {
++                if (scr_havechar(2))
++                {
++                    global.msg[0] = "\\E3* Oh^1, Susie^1!&* It's the training dummy I made!/";
++                }
++                else
++                {
+-            global.msg[0] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_292_0");
++                    global.msg[0] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_292_0");
+-            global.msg[1] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_293_0");
++                }
+-            global.msg[2] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_294_0");
++                global.msg[1] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_293_0");
+-            global.msg[3] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_295_0");
++                global.msg[2] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_294_0");
+-            global.msg[4] = " ";
++                if (scr_havechar(2))
++                {
++                    scr_susface(3, 0);
++                    global.msg[4] = "* I'll pass./";
++                    if (scr_havechar(1))
++                    {
++                        scr_ralface(5, 1);
++                        global.msg[6] = "* OK, umm.../";
++                        global.msg[7] = "\\E6* What about you, Kris?/";
++                        global.msg[8] = "\\C2";
++                    }
++                    else
++                    {
++                        scr_ralface(5, 3);
++                        global.msg[6] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_307_0");
++                        global.msg[7] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_308_0");
++                        global.msg[8] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_309_0");
++                        global.msg[9] = "\\E6* Here!&* I made a Manual for you and Kris!/";
++                        global.msg[10] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_311_0") + scr_get_input_name(6) + scr_84_get_lang_string("scr_text_slash_scr_text_gml_311_1");
++                        scr_noface(11);
++                        global.msg[12] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_313_0");
++                    }
++                }
++                else
++                {
++                    global.msg[3] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_295_0");
++                }
++            }
++            else
++            {
++                global.msg[0] = "\\E3* Oh, I nearly forgot about the training dummy!/";
++                global.msg[1] = "\\EB* I was going to teach Kris and Susie about battles.../";
++                global.msg[2] = "\\E1* .../";
++                global.msg[3] = "\\E6* I suppose... another rehearsal couldn’t hurt, right?/";
++                global.msg[4] = "\\C2";
++            }
+             break;
+         case 136:
+             if (global.choice == 0)
+             {
++                if (scr_havechar(1) && scr_havechar(2))
++                {
++                    global.msg[0] = "\\TX\\F0\\E7\\FS\\TS* Arright, fine!/";
++                    global.msg[1] = "\\E0* Let's just crush that dummy and move on./";
++                    scr_ralface(2, 6);
++                    global.msg[3] = "* Um... There's more to battles than just attacking, Susie./";
++                    scr_susface(4, 2);
++                    global.msg[5] = "* Look, you want a battle?/";
++                    global.msg[6] = "\\E4* I'll SHOW you a battle!!/%";
++                }
++                else if (scr_havechar(1))
++                {
+-                global.msg[0] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_302_0");
++                    global.msg[0] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_302_0");
++                }
++                else
++                {
++                    global.msg[0] = "\\E0* OK! Just like I practiced, like Kris and Susie are here./%";
++                }
+                 with (obj_tutorialbattleevent)
+                 {
+                     con = 20;
+                 }
+             }
+-            else
++            else if (scr_havechar(1))
+             {
+                 global.msg[0] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_307_0");
+                 global.msg[1] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_308_0");
+@@ -300,6 +360,14 @@
+                 global.msg[4] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_311_0") + scr_get_input_name(6) + scr_84_get_lang_string("scr_text_slash_scr_text_gml_311_1");
+                 scr_noface(5);
+                 global.msg[6] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_313_0");
++            }
++            else
++            {
++                global.msg[0] = "\\EB* On second thought, I should catch up with Kris and Susie./";
++                global.msg[1] = "\\E2* Since I have to leave the training dummy behind.../";
++                global.msg[2] = "\\E0* I need to give them the Manual I wrote when I meet them!/";
++                scr_noface(3);
++                global.msg[4] = scr_84_get_lang_string("scr_text_slash_scr_text_gml_313_0");
+             }
+             break;
+         case 140:

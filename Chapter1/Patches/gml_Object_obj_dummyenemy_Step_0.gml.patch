@@ -1,0 +1,48 @@
+--- a/Code/gml_Object_obj_dummyenemy_Step_0.gml
++++ b/Code/gml_Object_obj_dummyenemy_Step_0.gml
+@@ -3,23 +3,34 @@
+     scr_ambush();
+     ambushed = 1;
+ }
++global.charmove[0] = 0;
++global.charmove[1] = 0;
++global.charmove[2] = 0;
++if (scr_havechar(2))
++{
++    global.charmove[scr_findchar(1)] = 1;
++}
+ if (plot != 3)
+ {
+-    global.charmove[0] = 1;
+-    global.charmove[1] = 0;
+-    if (global.charspecial[0] == 100)
+-    {
+-        spare_used = 1;
+-    }
+-    else
+-    {
+-        spare_used = 0;
++    if (scr_havechar(1))
++    {
++        global.charmove[scr_findchar(1)] = 1;
++        if (global.charspecial[0] == 100)
++        {
++            spare_used = 1;
++        }
++        else
++        {
++            spare_used = 0;
++        }
+     }
+ }
+ else
+ {
+-    global.charmove[0] = 0;
+-    global.charmove[1] = 1;
++    if (scr_havechar(3))
++    {
++        global.charmove[scr_findchar(3)] = 1;
++    }
+     if (global.charspecial[1] == 100)
+     {
+         ral_wrongcommand = 1;
